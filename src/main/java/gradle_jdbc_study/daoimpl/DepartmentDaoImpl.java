@@ -45,26 +45,67 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	
 	@Override
 	public Department selectDepartmentByNo(Department dept) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "select deptno, deptname, floor from department whrer deptno = ?";
+		
+		Department selDept = null;
+		
+		try (Connection conn = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);){
+			pstmt.setInt(1, dept.getDeptNo());
+			log.trace(pstmt);
+			try(ResultSet rs = pstmt.executeQuery();){
+				if(rs.next()) {
+					selDept = getDepartment(rs);
+				}
+			}
+		}
+		return selDept;
 	}
 
 	@Override
 	public int insertDepartment(Department dept) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "insert into department(deptno, deptname, floor) values(?, ?, ?)";
+		int res = -1;
+		
+		try(Connection conn = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);){
+			pstmt.setInt(1, dept.getDeptNo());
+			pstmt.setString(2, dept.getDeptName());
+			pstmt.setInt(3, dept.getFloor());
+			log.trace(pstmt);
+			res = pstmt.executeUpdate();
+		}
+		return res;
 	}
 
 	@Override
 	public int deleteDepartment(Department dept) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "delete from department where deptno=?";
+		int res = -1;
+		
+		try(Connection conn = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);){
+			pstmt.setInt(1, dept.getDeptNo());
+			log.trace(pstmt);
+			res = pstmt.executeUpdate();
+		}
+		return res;
 	}
 
 	@Override
 	public int updateDepartment(Department dept) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "update department set deptname=?, floor=? where deptno=?;";
+		int res = -1;
+		
+		try(Connection conn = ConnectionProvider.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);){
+			pstmt.setString(1, dept.getDeptName());
+			pstmt.setInt(2, dept.getFloor());
+			pstmt.setInt(3, dept.getDeptNo());
+			log.trace(pstmt);
+			res = pstmt.executeUpdate();
+		}
+		return res;
 	}
 
 }

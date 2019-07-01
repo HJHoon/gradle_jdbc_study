@@ -1,3 +1,4 @@
+
 package gradle_jdbc_study;
 
 import java.util.List;
