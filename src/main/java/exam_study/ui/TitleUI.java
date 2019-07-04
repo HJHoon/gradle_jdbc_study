@@ -1,24 +1,23 @@
 package exam_study.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.BoxLayout;
 
 import exam_study.dao.TitleDao;
 import exam_study.daoimpl.TitleDaoImpl;
 import exam_study.dto.Title;
 import exam_study.ui.content.PanelTitle;
-import javax.swing.JButton;
 import exam_study.ui.content.PanelTitleList;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class TitleUI extends JFrame implements ActionListener {
@@ -86,15 +85,31 @@ public class TitleUI extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAdd) {
-			try {
+			if (btnAdd.getText().equals("추가")) {
 				actionPerformedBtnAdd(e);
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			}else {
+				actionPerformedBtnUpdate(e);
 			}
 		}
 		if (e.getSource() == btnCancel) {
-			actionPerformedBtnCancel(e);
+			try {
+				actionPerformedBtnCancel(e);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	private void actionPerformedBtnUpdate(ActionEvent e) {
+		Title title = pTitle.getUpdateTitle();
+		
+		int res = -1;
+		try {
+			res = dao.updateTitle(title);
+			refresh();
+			btnAdd.setText("추가");
+		}catch(SQLException e1) {
+			e1.printStackTrace();
 		}
 	}
 	
@@ -110,5 +125,29 @@ public class TitleUI extends JFrame implements ActionListener {
 		pTitle.clearTf();
 		pTitleList.setTitleList(dao.selectTitleByAll());
 		pTitleList.reloadData();
+	}
+	
+	public void refresh() throws SQLException{
+		pTitle.setTitle(dao.selectTitleByAll());
+		pTitleList.setTitleList(dao.selectTitleByAll());
+		pTitleList.reloadData();
+	}
+	
+	public void updateTitleUI(Title searchTitle) {
+		pTitle.setTitle(searchTitle);
+		btnAdd.setText("수정");
+		pTitle.setSearchTitleNo(searchTitle);
+	}
+	
+	public void deleteTitleUI(Title searchTitle) {
+		int res = -1;
+		
+		try {
+			res = dao.deleteTitle(searchTitle);
+			JOptionPane.showMessageDialog(null, "삭제완료");
+			refresh();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -45,10 +45,14 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 		contentPane.add(btnDept);
 		
 		btnTitle = new JButton("직책관리");
+		btnTitle.addActionListener(this);
 		contentPane.add(btnTitle);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnTitle) {
+			actionPerformedBtnTitle(e);
+		}
 		try {
 			if (e.getSource() == btnDept) {
 				actionPerformedBtnDept(e);
@@ -63,5 +67,8 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 			frameDept = new DepartmentUI();
 		}
 		frameDept.setVisible(true);
+	}
+	protected void actionPerformedBtnTitle(ActionEvent e) {
+		
 	}
 }

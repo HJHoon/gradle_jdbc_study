@@ -17,7 +17,7 @@ public class DepartmentDapImpl implements DepartmentDao {
 	public List<Department> selectDepartmentByAll() throws SQLException {
 		List<Department> lists = new ArrayList<Department>();
 		
-		String sql = "select depno, deptname, floor from department";
+		String sql = "select deptno, deptname, floor from department";
 		
 		try(Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -31,12 +31,12 @@ public class DepartmentDapImpl implements DepartmentDao {
 	}
 
 	private Department getDepartment(ResultSet rs) throws SQLException {
-		return new Department(rs.getInt("depno"), rs.getString("deptname"), rs.getInt("floor"));
+		return new Department(rs.getInt("deptno"), rs.getString("deptname"), rs.getInt("floor"));
 	}
 
 	@Override
 	public int insertDepartment(Department department) throws SQLException {
-		String sql = "insert into department(depno, deptname, floor) values(?, ?, ?)";
+		String sql = "insert into department(deptno, deptname, floor) values(?, ?, ?)";
 		
 		int res = -1;
 		
@@ -52,7 +52,7 @@ public class DepartmentDapImpl implements DepartmentDao {
 
 	@Override
 	public int updateDepartment(Department department) throws SQLException {
-		String sql = "update department set deptname=?, floor=? where depno=?;";
+		String sql = "update department set deptname=?, floor=? where deptno=?;";
 		int res = -1;
 		
 		try(Connection conn = ConnectionProvider.getConnection();
@@ -67,7 +67,7 @@ public class DepartmentDapImpl implements DepartmentDao {
 
 	@Override
 	public int deleteDepartment(Department department) throws SQLException {
-		String sql = "delete from department where depno=?";
+		String sql = "delete from department where deptno=?";
 		int res = -1;
 		
 		try(Connection conn = ConnectionProvider.getConnection();

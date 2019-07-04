@@ -1,8 +1,10 @@
 package exam_study.ui.content;
 
-import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.util.List;
+
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -12,6 +14,12 @@ import exam_study.dto.Title;
 public class PanelTitle extends JPanel {
 	private JTextField tfTno;
 	private JTextField tfTname;
+	private Title searchTitleNo;
+	private Title nextTitle;
+	
+	public void setSearchTitleNo(Title searchTitleNo) {
+		this.searchTitleNo = searchTitleNo;
+	}
 
 	public PanelTitle() {
 
@@ -45,6 +53,13 @@ public class PanelTitle extends JPanel {
 		return new Title(tno, tname);
 	}
 	
+	public Title getUpdateTitle() {
+		int tno = searchTitleNo.getTitleNo();
+		String tname = tfTname.getText().trim();
+		
+		return new Title(tno, tname);
+	}
+	
 	public void setTitle(Title title) {
 		tfTno.setText(title.getTitleNo()+"");
 		tfTname.setText(title.getTitleName());
@@ -52,6 +67,14 @@ public class PanelTitle extends JPanel {
 	
 	public void clearTf() {
 		tfTno.setText("");
+		tfTname.setText("");
+	}
+	
+	public void setTitle(List<Title> list) {
+		nextTitle = list.get(list.size()-1);
+		String no = String.format("T%03d", nextTitle.getTitleNo()+1);
+		tfTno.setText(no);
+		tfTno.setEnabled(false);
 		tfTname.setText("");
 	}
 }
