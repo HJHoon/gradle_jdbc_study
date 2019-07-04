@@ -36,7 +36,7 @@ public class DepartmentUI extends JFrame implements ActionListener {
 	}
 	
 	public void setDeptList(List<Department> deptList) {
-		this.deptList = deptList;
+		this.deptList = deptList; 
 	}
 
 	public DepartmentUI() {
