@@ -1,6 +1,5 @@
 package exam_study.ui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -23,39 +22,33 @@ import exam_study.ui.content.PanelTitleList;
 public class TitleUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	
-	private TitleDao dao;
-	private List<Title> titleList;
-
 	private PanelTitleList pTitleList;
 
 	private PanelTitle pTitle;
 	private JButton btnCancel;
 	private JButton btnAdd;
+	private TitleDao dao;
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TitleUI frame = new TitleUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	private List<Title> titleList;
+
+	public void setTitleDao(TitleDao dao) {
+		this.dao = dao;
 	}
+	
 
 	public TitleUI() throws SQLException {
 		dao = new TitleDaoImpl();
-		titleList = dao.selectTitleByAll();
-		
+		try {
+			titleList = dao.selectTitleByAll();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		initComponents();
 	}
 	
 	private void initComponents() {
 		setTitle("직책 관리");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -63,6 +56,7 @@ public class TitleUI extends JFrame implements ActionListener {
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
 		pTitle = new PanelTitle();
+		pTitle.setTitle(titleList);
 		contentPane.add(pTitle);
 		
 		JPanel pBtn = new JPanel();
@@ -78,6 +72,7 @@ public class TitleUI extends JFrame implements ActionListener {
 		pBtn.add(btnCancel);
 		
 		pTitleList = new PanelTitleList();
+		pTitleList.setParent(this);
 		pTitleList.setTitleList(titleList);
 		pTitleList.reloadData();
 		contentPane.add(pTitleList);
@@ -113,18 +108,23 @@ public class TitleUI extends JFrame implements ActionListener {
 		}
 	}
 	
-	protected void actionPerformedBtnCancel(ActionEvent e) {
-		pTitle.clearTf();
+	protected void actionPerformedBtnCancel(ActionEvent e) throws SQLException {
+		pTitle.setTitle(dao.selectTitleByAll());
 	}
 	
-	protected void actionPerformedBtnAdd(ActionEvent e) throws SQLException {
-		Title title = pTitle.getTitle(); //panel에 입력한 정보를 객체로 받아옴
+	protected void actionPerformedBtnAdd(ActionEvent e) {
+		Title title = pTitle.getTitle();
 		
-		dao.insertTitle(title);
-		JOptionPane.showMessageDialog(null, String.format("%s 직책이 추가되었습니다.", title.getTitleName()));
-		pTitle.clearTf();
-		pTitleList.setTitleList(dao.selectTitleByAll());
-		pTitleList.reloadData();
+		int res;
+		try {
+			res = dao.insertTitle(title);
+			if(res != -1) {
+				JOptionPane.showMessageDialog(null, String.format("%s 부서가 추가되었습니다.", title.getTitleName()));
+				refresh();
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	public void refresh() throws SQLException{
@@ -135,6 +135,7 @@ public class TitleUI extends JFrame implements ActionListener {
 	
 	public void updateTitleUI(Title searchTitle) {
 		pTitle.setTitle(searchTitle);
+		
 		btnAdd.setText("수정");
 		pTitle.setSearchTitleNo(searchTitle);
 	}

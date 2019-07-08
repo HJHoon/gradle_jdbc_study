@@ -13,7 +13,8 @@ import exam_study.dto.Title;
 @SuppressWarnings("serial")
 public class PanelTitle extends JPanel {
 	private JTextField tfTno;
-	private JTextField tfTname;
+	private JTextField tfTitleName;
+	
 	private Title searchTitleNo;
 	private Title nextTitle;
 	
@@ -22,7 +23,6 @@ public class PanelTitle extends JPanel {
 	}
 
 	public PanelTitle() {
-
 		initComponents();
 	}
 	
@@ -41,33 +41,23 @@ public class PanelTitle extends JPanel {
 		lblTname.setHorizontalAlignment(SwingConstants.RIGHT);
 		add(lblTname);
 		
-		tfTname = new JTextField();
-		tfTname.setColumns(10);
-		add(tfTname);
+		tfTitleName = new JTextField();
+		tfTitleName.setColumns(10);
+		add(tfTitleName);
 	}
 	
 	public Title getTitle() {
-		int tno = Integer.parseInt(tfTno.getText().trim());
-		String tname = tfTname.getText().trim();
+		int titleno = nextTitle.getTitleNo()+1;
+		String titlename = tfTitleName.getText().trim();
 		
-		return new Title(tno, tname);
+		return new Title(titleno,titlename);
 	}
 	
 	public Title getUpdateTitle() {
 		int tno = searchTitleNo.getTitleNo();
-		String tname = tfTname.getText().trim();
+		String tname = tfTitleName.getText().trim();
 		
 		return new Title(tno, tname);
-	}
-	
-	public void setTitle(Title title) {
-		tfTno.setText(title.getTitleNo()+"");
-		tfTname.setText(title.getTitleName());
-	}
-	
-	public void clearTf() {
-		tfTno.setText("");
-		tfTname.setText("");
 	}
 	
 	public void setTitle(List<Title> list) {
@@ -75,6 +65,15 @@ public class PanelTitle extends JPanel {
 		String no = String.format("T%03d", nextTitle.getTitleNo()+1);
 		tfTno.setText(no);
 		tfTno.setEnabled(false);
-		tfTname.setText("");
+		tfTitleName.setText("");
+	}
+	
+
+	
+	public void setTitle(Title selTitle) {
+		String no = String.format("T%03d", selTitle.getTitleNo());
+		tfTno.setText(no);
+		tfTno.setEnabled(false);
+		tfTitleName.setText(selTitle.getTitleName());
 	}
 }

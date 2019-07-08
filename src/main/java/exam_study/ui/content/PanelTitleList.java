@@ -17,23 +17,27 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import exam_study.dao.TitleDao;
 import exam_study.dto.Title;
 import exam_study.ui.TitleUI;
 
 @SuppressWarnings("serial")
 public class PanelTitleList extends JPanel implements ActionListener{
 	private JTable table;
-	private TitleUI parent;
+	
 	
 	private List<Title> titleList;
 	
 	private JPopupMenu popupMenu;
 	private JMenuItem mntmPopUpdate;
 	private JMenuItem mntmPopDelete;
+	private TitleUI parent;
 	
 	public void setTitleList(List<Title> titleList) {
 		this.titleList = titleList;
+	}
+	
+	public void setParent(TitleUI parent) {
+		this.parent = parent;
 	}
 
 	public PanelTitleList() {
@@ -48,6 +52,18 @@ public class PanelTitleList extends JPanel implements ActionListener{
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		popupMenu = new JPopupMenu();
+		
+		mntmPopUpdate = new JMenuItem("수정");
+		mntmPopUpdate.addActionListener(this);
+		popupMenu.add(mntmPopUpdate);
+		
+		mntmPopDelete = new JMenuItem("삭제");
+		mntmPopDelete.addActionListener(this);
+		popupMenu.add(mntmPopDelete);
+		
+		table.setComponentPopupMenu(popupMenu);
 	}
 	
 	public void reloadData() {
@@ -109,7 +125,7 @@ public class PanelTitleList extends JPanel implements ActionListener{
 			return;
 		}
 		if (i < 0 || i > table.getModel().getRowCount() - 1) { // 선택하지 않은 경우
-			JOptionPane.showMessageDialog(null, "선택된 부서가 없습니다.");
+			JOptionPane.showMessageDialog(null, "선택된 직책이 없습니다.");
 			return;
 		}
 		
@@ -124,7 +140,7 @@ public class PanelTitleList extends JPanel implements ActionListener{
 			return;
 		}
 		if(i<0 || i > table.getModel().getRowCount() -1) {
-			JOptionPane.showMessageDialog(null, "선택된 부서가 없습니다.");
+			JOptionPane.showMessageDialog(null, "선택된 직책이 없습니다.");
 			return;
 		}
 		Title searchTitle = titleList.get(i);

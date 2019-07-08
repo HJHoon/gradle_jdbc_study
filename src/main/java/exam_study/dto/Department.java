@@ -11,7 +11,7 @@ public class Department {
 	public Department(int deptNo) {
 		this.deptNo = deptNo;
 	}
-
+	
 	public Department(int deptNo, String deptName, int floor) {
 		this.deptNo = deptNo;
 		this.deptName = deptName;
@@ -44,7 +44,7 @@ public class Department {
 
 	@Override
 	public String toString() {
-		return String.format("%s(%s)", deptName, deptNo);
+		return String.format("%s(%s층)", deptName, floor);
 	}
 
 	public Object[] toArray() {

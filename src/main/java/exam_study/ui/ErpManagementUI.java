@@ -22,6 +22,8 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 	private JButton btnTitle;
 	
 	private DepartmentUI frameDept;
+	private TitleUI frameTitle;
+	private EmployeeUI frameEmp;
 	private DepartmentDao deptDao;
 	
 	public ErpManagementUI() {
@@ -38,6 +40,7 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 		contentPane.setLayout(new GridLayout(0, 3, 0, 0));
 		
 		btnEmp = new JButton("사원관리");
+		btnEmp.addActionListener(this);
 		contentPane.add(btnEmp);
 		
 		btnDept = new JButton("부서관리");
@@ -50,8 +53,15 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnEmp) {
+			actionPerformedBtnEmp(e);
+		}
 		if (e.getSource() == btnTitle) {
-			actionPerformedBtnTitle(e);
+			try {
+				actionPerformedBtnTitle(e);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 		try {
 			if (e.getSource() == btnDept) {
@@ -68,7 +78,16 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 		}
 		frameDept.setVisible(true);
 	}
-	protected void actionPerformedBtnTitle(ActionEvent e) {
-		
+	protected void actionPerformedBtnTitle(ActionEvent e) throws SQLException {
+		if(frameTitle == null) {
+			frameTitle = new TitleUI();
+		}
+		frameTitle.setVisible(true);
+	}
+	protected void actionPerformedBtnEmp(ActionEvent e) {
+		if(frameEmp == null) {
+			frameEmp = new EmployeeUI();
+		}
+		frameEmp.setVisible(true);
 	}
 }

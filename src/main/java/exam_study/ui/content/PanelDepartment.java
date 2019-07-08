@@ -56,13 +56,7 @@ public class PanelDepartment extends JPanel {
 		add(tfFloor);
 	}
 	
-	/*
-	public void setDepartment(Department department) {
-		tfDeptNo.setText(department.getDeptNo()+"");
-		tfDeptName.setText(department.getDeptName());
-		tfFloor.setText(department.getFloor()+"");
-	}
-	*/
+	
 	
 	public Department getDepartmnet() { //insert - panel에 있는 정보 불러와서 객체로 만듦
 		int deptno = nextDept.getDeptNo()+1;
@@ -79,13 +73,7 @@ public class PanelDepartment extends JPanel {
 		
 		return new Department(deptno, deptname, floor);
 	}
-	
-//	public void clearTf() {
-//		tfDeptNo.setText("");
-//		tfDeptName.setText("");
-//		tfFloor.setText("");
-//	}
-	
+
 	public void setDepartment(List<Department> list) { //수정버튼 외 세팅
 		nextDept = list.get(list.size()-1);
 		String no = String.format("D%03d", nextDept.getDeptNo()+1);
